@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "string.h"
 #include <stdbool.h>
+#include <malloc.h>
 
 struct Node {
     char data[30];
@@ -12,7 +13,7 @@ typedef struct Node Node;
 Node *head;
 Node *tail;
 
-void printList() {
+void print_list() {
     Node *iterator = head;
 
     while(iterator !=  NULL) {
@@ -42,6 +43,7 @@ bool delete(Node node) {
     while(iterator != NULL) {
         if(strcmp(node.data, iterator->data) == 0) {
             iterator->predecessor->next = iterator->next;
+            free(iterator);
             return true;
         }
         iterator = iterator->next;
@@ -49,15 +51,15 @@ bool delete(Node node) {
     return false;
 }
 
-bool insert(Node node, int index) {
+bool insert(Node *node, int index) {
     Node *iterator = head;
     Node *temp;
 
     if(index == 0) {
         if(head == NULL) {
-            head = &node;
+            head = node;
         } else {
-            head->predecessor = &node;
+            head->predecessor = node;
             head = head->predecessor;
         }
         return true;
@@ -66,22 +68,36 @@ bool insert(Node node, int index) {
     for(; index > 0; index--) {
         if(iterator->next != NULL) {
             iterator = iterator->next;
-        } else {
-            return false;
         }
     }
     temp = iterator->next;
-    iterator->next = &node;
+    iterator->next = node;
     if(temp != NULL) {
-        node.next = temp->next;
+        node->next = temp->next;
     }
     return true;
 }
 
+Node *create_empty_node() {
+    Node *result = malloc(sizeof(Node));
+    result->next = NULL;
+    result->predecessor = NULL;
+    return result;
+}
+
 int main() {
-    Node n1;
-    strcpy(n1.data, "test");
+    Node *n1 = create_empty_node();
+    Node *n2 = create_empty_node();
+    Node *n3 = create_empty_node();
+    Node *n4 = create_empty_node();
+    strcpy(n1->data, "test");
+    strcpy(n2->data, "baka");
+    strcpy(n3->data, "ahhh");
+    strcpy(n4->data, "gugu");
     insert(n1, 0);
-    printList();
+    insert(n2, 1);
+    insert(n3, 2);
+    insert(n4, 1);
+    print_list();
     return 0;
 }
