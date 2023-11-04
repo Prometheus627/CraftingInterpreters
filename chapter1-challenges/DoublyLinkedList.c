@@ -1,103 +1,57 @@
+//
+// Implementation of a doubly linked list with nodes holding char* as data
+// Created by Dennis Forster on 14-Oct-23.
+//
+
 #include <stdio.h>
-#include "string.h"
-#include <stdbool.h>
-#include <malloc.h>
 
-struct Node {
-    char data[30];
-    struct Node *next;
-    struct Node *predecessor;
-};
-typedef struct Node Node;
+/**
+ * Node defining data structure, which takes a char* as main data and two references to a predecessor- and successor
+ * Node, respectively.
+ */
+typedef struct Node {
+    char* data;
+    struct Node* predecessor;
+    struct Node* successor;
+} Node;
 
-Node *head;
-Node *tail;
-
-void print_list() {
-    Node *iterator = head;
-
-    while(iterator !=  NULL) {
-        printf("%s - ", iterator->data);
-        iterator = iterator->next;
-    }
-    printf("\n");
+/**
+ * Constructor for a Node struct.
+ * @param data main data for Node
+ * @return Node with given char*
+ */
+Node nodeConstructor(char* data) {
+    Node n1;
+    n1.data = data;
+    n1.predecessor = NULL;
+    n1.successor = NULL;
+    return n1;
 }
 
-int find(Node node) {
-    Node *iterator = head;
-    int index = 0;
-
-    while(iterator !=  NULL) {
-        if(strcmp(node.data, iterator->data) == 0) {
-            return index;
-        }
-        ++index;
-        iterator = iterator->next;
-    }
+/**
+ * Inserts a node into the list at a given index, with the given data.
+ * @param index index at which the node is to be inserted
+ * @param data data of the node that is to be inserted
+ * @return 0, if successful, -1 otherwise
+ */
+int insert(int index, char* data) {
     return -1;
 }
 
-bool delete(Node node) {
-    Node *iterator = head;
-
-    while(iterator != NULL) {
-        if(strcmp(node.data, iterator->data) == 0) {
-            iterator->predecessor->next = iterator->next;
-            free(iterator);
-            return true;
-        }
-        iterator = iterator->next;
-    }
-    return false;
+/**
+ * Deletes the first found node that has the given key.
+ * @param key char* key that is to be searched for
+ * @return 0, if successful, -1 otherwise
+ */
+int delete(char* key) {
+    return -1;
 }
 
-bool insert(Node *node, int index) {
-    Node *iterator = head;
-    Node *temp;
+/**
+ * Returns the index of a node with the given key or -1, if no such node could be found.
+ * @param key char* key that is to be searched for
+ * @return the index of a node with the given key or -1, if no such node could be found
+ */
+int find(char* key) {
+    return -1;
 
-    if(index == 0) {
-        if(head == NULL) {
-            head = node;
-        } else {
-            head->predecessor = node;
-            head = head->predecessor;
-        }
-        return true;
-    }
-
-    for(; index > 0; index--) {
-        if(iterator->next != NULL) {
-            iterator = iterator->next;
-        }
-    }
-    temp = iterator->next;
-    iterator->next = node;
-    if(temp != NULL) {
-        node->next = temp->next;
-    }
-    return true;
-}
-
-Node *create_empty_node() {
-    Node *result = malloc(sizeof(Node));
-    result->next = NULL;
-    result->predecessor = NULL;
-    return result;
-}
-
-int main() {
-    Node *n1 = create_empty_node();
-    Node *n2 = create_empty_node();
-    Node *n3 = create_empty_node();
-    Node *n4 = create_empty_node();
-    strcpy(n1->data, "test");
-    strcpy(n2->data, "baka");
-    strcpy(n3->data, "ahhh");
-    strcpy(n4->data, "gugu");
-    insert(n1, 0);
-    insert(n2, 1);
-    insert(n3, 2);
-    insert(n4, 1);
-    print_list();
-    return 0;
-}
